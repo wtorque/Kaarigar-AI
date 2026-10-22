@@ -1,0 +1,460 @@
+openapi: 3.0.3
+info:
+  title: Kaarigar AI REST API
+  description: >
+    Enterprise-grade backend API powering traditional Indian artisans (Kaarigars)
+    with AI-assisted cataloguing, regional craft cluster heritage (GI tags),
+    concurrency-safe commerce, and real-time inventory management.
+  version: 1.0.0
+  contact:
+    name: Kaarigar AI Engineering
+    email: engineering@kaarigar.ai
+servers:
+  - url: http://localhost:4000/api/v1
+    description: Local Development Server
+  - url: https://api.kaarigar.ai/api/v1
+    description: Production Gateway
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: Firebase ID Token passed in Authorization header
+    idempotencyKey:
+      type: apiKey
+      in: header
+      name: Idempotency-Key
+      description: UUIDv4 idempotency key for financial / state-mutating requests
+
+  schemas:
+    ErrorResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        error:
+          type: object
+          properties:
+            code:
+              type: string
+              example: VALIDATION_ERROR
+            message:
+              type: string
+              example: Invalid input parameters
+            details:
+              type: array
+              items:
+                type: object
+            requestId:
+              type: string
+              example: req-1a2b3c4d
+
+    SuccessEnvelope:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: true
+        data:
+          type: object
+
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        email:
+          type: string
+          format: email
+        name:
+          type: string
+        phone:
+          type: string
+        avatarUrl:
+          type: string
+        role:
+          type: string
+          enum: [CUSTOMER, ARTISAN, ADMIN, SUPER_ADMIN]
+        status:
+          type: string
+          enum: [ACTIVE, SUSPENDED, PENDING]
+
+    Product:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        title:
+          type: string
+        slug:
+          type: string
+        description:
+          type: string
+        craftTechnique:
+          type: string
+        story:
+          type: string
+        clusterRegion:
+          type: string
+        giTagNumber:
+          type: string
+        basePriceMinor:
+          type: integer
+          description: Price in minor currency units (paise)
+        currency:
+          type: string
+          example: INR
+        status:
+          type: string
+          enum: [DRAFT, PUBLISHED, ARCHIVED, OUT_OF_STOCK]
+
+paths:
+  /health:
+    get:
+      summary: Liveness health check
+      security: []
+      responses:
+        '200':
+          description: API server is alive
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessEnvelope'
+
+  /health/ready:
+    get:
+      summary: Readiness health check (PostgreSQL and Redis)
+      security: []
+      responses:
+        '200':
+          description: All dependencies ready
+        '503':
+          description: Database or critical dependency unavailable
+
+  /me:
+    get:
+      summary: Get authenticated user profile and roles
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: User profile resolved from Firebase token
+        '401':
+          $ref: '#/components/schemas/ErrorResponse'
+    patch:
+      summary: Update user profile settings
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                phone:
+                  type: string
+                avatarUrl:
+                  type: string
+      responses:
+        '200':
+          description: Profile updated
+
+  /me/addresses:
+    get:
+      summary: List shipping and billing addresses
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Array of customer addresses
+    post:
+      summary: Create new customer address
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [fullName, phone, streetAddress, city, state, postalCode]
+              properties:
+                fullName:
+                  type: string
+                phone:
+                  type: string
+                streetAddress:
+                  type: string
+                city:
+                  type: string
+                state:
+                  type: string
+                postalCode:
+                  type: string
+                country:
+                  type: string
+                  default: IN
+                isDefault:
+                  type: boolean
+      responses:
+        '201':
+          description: Address created
+
+  /artisans/onboarding:
+    post:
+      summary: Submit artisan onboarding details for verification
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [businessName, craftTitle]
+              properties:
+                businessName:
+                  type: string
+                craftTitle:
+                  type: string
+                story:
+                  type: string
+                clusterRegion:
+                  type: string
+                giTagNumber:
+                  type: string
+                idDocumentType:
+                  type: string
+                idDocumentNumber:
+                  type: string
+      responses:
+        '201':
+          description: Onboarding application submitted with PENDING status
+
+  /categories:
+    get:
+      summary: List hierarchical craft categories and GI clusters
+      security: []
+      responses:
+        '200':
+          description: List of categories
+    post:
+      summary: Create a new category (Admin only)
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [name, slug]
+              properties:
+                name:
+                  type: string
+                slug:
+                  type: string
+                description:
+                  type: string
+                imageUrl:
+                  type: string
+      responses:
+        '201':
+          description: Category created
+
+  /products:
+    get:
+      summary: Browse published handcrafted products with filters
+      security: []
+      parameters:
+        - name: page
+          in: query
+          schema:
+            type: integer
+            default: 1
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 20
+        - name: categoryId
+          in: query
+          schema:
+            type: string
+            format: uuid
+        - name: search
+          in: query
+          schema:
+            type: string
+        - name: clusterRegion
+          in: query
+          schema:
+            type: string
+        - name: minPrice
+          in: query
+          schema:
+            type: integer
+        - name: maxPrice
+          in: query
+          schema:
+            type: integer
+        - name: sortBy
+          in: query
+          schema:
+            type: string
+            enum: [newest, price_asc, price_desc, popular]
+      responses:
+        '200':
+          description: Paginated products list
+
+  /products/{id}:
+    get:
+      summary: Get single product details, variants, images, and inventory
+      security: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Product details with artisan provenance
+        '404':
+          description: Product not found
+
+  /artisans/products:
+    post:
+      summary: Create a new product (Verified artisans only)
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [title, description, categoryId, basePriceMinor, images, variants]
+      responses:
+        '201':
+          description: Product created successfully
+        '403':
+          description: Artisan account pending verification or non-artisan
+
+  /ai/catalogue:
+    post:
+      summary: Initiate AI vision cataloguing from craft photograph
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [imageUrl]
+              properties:
+                imageUrl:
+                  type: string
+                  format: uri
+                artisanNotes:
+                  type: string
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+                artisanNotes:
+                  type: string
+      responses:
+        '202':
+          description: Job accepted and queued in BullMQ
+
+  /ai/catalogue/{jobId}:
+    get:
+      summary: Poll status of AI catalogue vision job
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: jobId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Job status and extracted craft draft
+
+  /cart:
+    get:
+      summary: Get shopping cart with calculated totals in minor units
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: User cart details
+
+  /cart/items:
+    post:
+      summary: Add product variant to shopping cart
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [variantId, quantity]
+              properties:
+                variantId:
+                  type: string
+                  format: uuid
+                quantity:
+                  type: integer
+                  minimum: 1
+      responses:
+        '201':
+          description: Item added to cart
+
+  /payments/checkout:
+    post:
+      summary: Atomically reserve stock and initiate payment checkout session
+      security:
+        - bearerAuth: []
+        - idempotencyKey: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [shippingAddressId, items]
+      responses:
+        '200':
+          description: Order created with PENDING_PAYMENT and session generated
+        '409':
+          description: Stock unavailable for reservation
+
+  /webhooks/payments:
+    post:
+      summary: Cryptographically verified payment gateway webhook handler
+      security: []
+      description: Verifies HMAC-SHA256 signature and deduplicates provider event IDs
+      responses:
+        '200':
+          description: Webhook processed and order confirmed
+        '401':
+          description: Invalid cryptographic signature

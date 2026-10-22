@@ -1,0 +1,97 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: kaarigar-postgres
+    restart: always
+    environment:
+      POSTGRES_USER: kaarigar
+      POSTGRES_PASSWORD: kaarigar_secret
+      POSTGRES_DB: kaarigar_db
+    ports:
+      - '5432:5432'
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U kaarigar -d kaarigar_db']
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - kaarigar-network
+
+  redis:
+    image: redis:7-alpine
+    container_name: kaarigar-redis
+    restart: always
+    command: redis-server --appendonly yes
+    ports:
+      - '6379:6379'
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ['CMD', 'redis-cli', 'ping']
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - kaarigar-network
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: kaarigar-api
+    restart: on-failure
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    ports:
+      - '4000:4000'
+    environment:
+      NODE_ENV: development
+      PORT: 4000
+      HOST: 0.0.0.0
+      DATABASE_URL: postgresql://kaarigar:kaarigar_secret@postgres:5432/kaarigar_db?schema=public
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      STORAGE_PROVIDER: local
+      PAYMENT_PROVIDER: sandbox
+      ALLOW_DEV_AUTH_BYPASS: 'true'
+    volumes:
+      - api_uploads:/app/uploads
+    networks:
+      - kaarigar-network
+
+  worker:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: kaarigar-worker
+    restart: on-failure
+    command: ["node", "dist/workers/index.js"]
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    environment:
+      NODE_ENV: development
+      DATABASE_URL: postgresql://kaarigar:kaarigar_secret@postgres:5432/kaarigar_db?schema=public
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      ALLOW_DEV_AUTH_BYPASS: 'true'
+    networks:
+      - kaarigar-network
+
+volumes:
+  postgres_data:
+  redis_data:
+  api_uploads:
+
+networks:
+  kaarigar-network:
+    driver: bridge

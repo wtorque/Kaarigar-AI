@@ -1,0 +1,69 @@
+name: Kaarigar AI Backend CI
+
+on:
+  push:
+    branches: [main, master, backend, 'release/*']
+  pull_request:
+    branches: [main, master, backend]
+
+jobs:
+  test-and-build:
+    name: Build, Lint & Automated Tests
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: kaarigar_test
+          POSTGRES_PASSWORD: kaarigar_test_secret
+          POSTGRES_DB: kaarigar_test_db
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+      redis:
+        image: redis:7-alpine
+        ports:
+          - 6379:6379
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'npm'
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Generate Prisma Client
+        run: npx prisma generate
+
+      - name: TypeScript Strict Mode Lint
+        run: npm run lint
+
+      - name: Run Vitest Automated Test Suite
+        env:
+          NODE_ENV: test
+          DATABASE_URL: postgresql://kaarigar_test:kaarigar_test_secret@localhost:5432/kaarigar_test_db?schema=public
+          REDIS_HOST: localhost
+          REDIS_PORT: 6379
+          ALLOW_DEV_AUTH_BYPASS: 'true'
+          PAYMENT_WEBHOOK_SECRET: sample_webhook_secret
+        run: npm test
+
+      - name: Build Production Bundle
+        run: npm run build
