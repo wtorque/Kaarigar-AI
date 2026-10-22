@@ -1,0 +1,50 @@
+@import "tailwindcss";
+
+@theme {
+  --color-warm-bg: #FAF7F1;
+  --color-warm-surface: #FFFFFF;
+  --color-warm-primary: #76513B;
+  --color-warm-secondary: #A66B4D;
+  --color-warm-accent: #78816A;
+  --color-warm-text: #29251F;
+  --color-warm-muted: #777066;
+  --color-warm-border: #E8E0D5;
+  --color-warm-subtle: #F4EFE6;
+  --color-warm-terracotta: #A65636;
+  --color-warm-terracotta-dark: #5C3825;
+  --color-warm-olive: #78816A;
+  --color-warm-sand: #EAE3D6;
+
+  --font-serif: var(--font-playfair), ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
+  --font-sans: var(--font-sans), ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+:root {
+  --background: #FAF7F1;
+  --foreground: #29251F;
+}
+
+body {
+  background-color: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Custom scrollbar for clean horizontal product rows */
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Smooth craft glow and subtle shadow */
+.shadow-craft {
+  box-shadow: 0 4px 20px -2px rgba(118, 81, 59, 0.08), 0 2px 6px -1px rgba(0, 0, 0, 0.04);
+}
+.shadow-craft-hover {
+  box-shadow: 0 10px 30px -4px rgba(118, 81, 59, 0.14), 0 4px 12px -2px rgba(0, 0, 0, 0.06);
+}

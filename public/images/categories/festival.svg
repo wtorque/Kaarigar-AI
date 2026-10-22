@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" width="400" height="300">
+  <defs>
+    <linearGradient id="g1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#AF5D24"/><stop offset="100%" stop-color="#692803"/>
+    </linearGradient>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="6" stdDeviation="8" flood-opacity="0.18" flood-color="#4A2E1B"/>
+    </filter>
+    <radialGradient id="sunGlow" cx="50%" cy="40%" r="60%">
+      <stop offset="0%" stop-color="#FFF8EE" stop-opacity="0.8"/>
+      <stop offset="100%" stop-color="#EFE4D2" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="100%" height="100%" fill="url(#g1)" rx="16"/>
+  <rect width="100%" height="100%" fill="url(#sunGlow)"/>
+  <g filter="url(#shadow)">
+      <!-- Lit Diya -->
+      <path d="M120,220 C120,260 280,260 280,220 C270,195 240,190 200,190 C160,190 130,195 120,220 Z" fill="#D77B3C"/>
+      <ellipse cx="200" cy="210" rx="70" ry="18" fill="#9C4410"/>
+      <!-- Flame -->
+      <path d="M200,120 C190,155 180,175 190,195 C195,200 205,200 210,195 C220,175 210,155 200,120 Z" fill="#FFC837"/>
+      <path d="M200,140 C195,160 190,175 195,188 C198,192 202,192 205,188 C210,175 205,160 200,140 Z" fill="#FFFFFF"/>
+    </g>
+</svg>

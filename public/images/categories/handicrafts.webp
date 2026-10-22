@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" width="400" height="300">
+  <defs>
+    <linearGradient id="g1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#7C5036"/><stop offset="100%" stop-color="#4E2B18"/>
+    </linearGradient>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="6" stdDeviation="8" flood-opacity="0.18" flood-color="#4A2E1B"/>
+    </filter>
+    <radialGradient id="sunGlow" cx="50%" cy="40%" r="60%">
+      <stop offset="0%" stop-color="#FFF8EE" stop-opacity="0.8"/>
+      <stop offset="100%" stop-color="#EFE4D2" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="100%" height="100%" fill="url(#g1)" rx="16"/>
+  <rect width="100%" height="100%" fill="url(#sunGlow)"/>
+  <g filter="url(#shadow)">
+      <circle cx="200" cy="180" r="100" fill="#B37854" opacity="0.3"/>
+      <!-- Elephant motif -->
+      <path d="M140,230 C130,200 135,160 160,140 C190,115 240,115 270,145 C285,160 290,185 285,210 L280,240 L260,240 L260,200 C250,200 240,190 230,200 L230,240 L210,240 L210,190 L180,190 L180,240 L160,240 L160,210 C150,225 145,230 140,230 Z" fill="#E6C8A8"/>
+      <path d="M275,170 C290,175 300,195 300,220 C295,225 285,220 285,210" fill="none" stroke="#E6C8A8" stroke-width="8" stroke-linecap="round"/>
+      <circle cx="255" cy="155" r="4" fill="#4E2B18"/>
+    </g>
+</svg>

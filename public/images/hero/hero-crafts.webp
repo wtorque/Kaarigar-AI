@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 650" width="1000" height="650">
+  <defs>
+    <linearGradient id="heroBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#EFE6D8"/>
+      <stop offset="50%" stop-color="#E2D4BF"/>
+      <stop offset="100%" stop-color="#CBBBA1"/>
+    </linearGradient>
+    <radialGradient id="sun" cx="70%" cy="30%" r="50%">
+      <stop offset="0%" stop-color="#FFF8EE" stop-opacity="0.9"/>
+      <stop offset="100%" stop-color="#E2D4BF" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="heroShadow" x="-10%" y="-10%" width="130%" height="130%">
+      <feDropShadow dx="0" dy="15" stdDeviation="15" flood-opacity="0.2" flood-color="#3D2619"/>
+    </filter>
+  </defs>
+  <rect width="1000" height="650" fill="url(#heroBg)" rx="24"/>
+  <rect width="1000" height="650" fill="url(#sun)"/>
+
+  <!-- Table surface -->
+  <path d="M0,450 Q500,430 1000,450 L1000,650 L0,650 Z" fill="#A88B70" opacity="0.4"/>
+
+  <!-- Large Terracotta Urn/Vase with carving -->
+  <g filter="url(#heroShadow)">
+    <path d="M680,480 C630,420 640,320 680,240 C700,200 700,160 690,140 L760,140 C750,160 750,200 770,240 C810,320 820,420 770,480 Z" fill="#C47348"/>
+    <ellipse cx="725" cy="140" rx="35" ry="12" fill="#9E5028"/>
+    <!-- Tribal floral engraving bands -->
+    <path d="M665,300 Q725,315 785,300" stroke="#7A3916" stroke-width="6" fill="none"/>
+    <path d="M650,370 Q725,390 800,370" stroke="#7A3916" stroke-width="6" fill="none"/>
+  </g>
+
+  <!-- Pierced Table Lamp glowing -->
+  <g filter="url(#heroShadow)">
+    <circle cx="560" cy="400" r="75" fill="#DC8959"/>
+    <circle cx="560" cy="385" r="10" fill="#FFFBE6"/>
+    <circle cx="535" cy="410" r="8" fill="#FFFBE6"/>
+    <circle cx="585" cy="410" r="8" fill="#FFFBE6"/>
+    <circle cx="550" cy="435" r="7" fill="#FFFBE6"/>
+    <circle cx="570" cy="435" r="7" fill="#FFFBE6"/>
+  </g>
+
+  <!-- Handcarved Wooden Elephant -->
+  <g filter="url(#heroShadow)">
+    <path d="M430,490 C410,440 420,380 460,350 C500,320 560,330 580,370 C600,400 595,440 585,490 L560,490 L560,450 C550,450 540,440 530,450 L530,490 L500,490 L500,440 L465,440 L465,490 Z" fill="#7C5237"/>
+    <circle cx="565" cy="365" r="5" fill="#2E180D"/>
+  </g>
+
+  <!-- Handwoven Chanderi / Banarasi Silk Textile Draped -->
+  <g filter="url(#heroShadow)">
+    <path d="M720,380 C800,350 900,380 960,440 L940,550 C860,490 760,470 700,500 Z" fill="#8E2D3B"/>
+    <!-- Gold Zari Border -->
+    <path d="M710,440 C780,410 880,430 940,490" stroke="#E5B94E" stroke-width="12" fill="none"/>
+    <path d="M705,455 C775,425 875,445 935,505" stroke="#FAF7F1" stroke-width="3" stroke-dasharray="4,4" fill="none"/>
+  </g>
+
+  <!-- Woven River Grass Basket -->
+  <g filter="url(#heroShadow)">
+    <ellipse cx="440" cy="330" rx="55" ry="25" fill="#C5A674"/>
+    <path d="M385,330 C385,400 495,400 495,330 Z" fill="#B38F56"/>
+  </g>
+
+  <!-- Wooden Bowls Foreground -->
+  <g filter="url(#heroShadow)">
+    <ellipse cx="710" cy="495" rx="65" ry="28" fill="#5E3821"/>
+    <path d="M645,495 C645,550 775,550 775,495 Z" fill="#472613"/>
+  </g>
+</svg>

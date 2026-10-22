@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+    <circle cx="100" cy="100" r="100" fill="#667085"/>
+    <circle cx="100" cy="80" r="40" fill="#F4E9D8"/>
+    <path d="M40,180 C40,135 70,130 100,130 C130,130 160,135 160,180 Z" fill="#E4D5BE"/>
+    <!-- Headwrap or cultural accent -->
+    <path d="M60,65 C60,40 140,40 140,65 Z" fill="#FAF7F1" opacity="0.8"/>
+  </svg>
