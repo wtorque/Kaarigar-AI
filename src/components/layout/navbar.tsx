@@ -12,12 +12,9 @@ import {
   Menu,
   X,
   Heart,
-  Sparkles,
   LayoutDashboard,
-  ShieldCheck,
   User as UserIcon,
   LogOut,
-  SlidersHorizontal,
 } from "lucide-react";
 import { useAuth } from "@/features/auth/auth-context";
 import { useCart } from "@/features/cart/cart-context";
@@ -28,7 +25,7 @@ import { cn } from "@/lib/utilities/cn";
 export function Navbar() {
   const pathname = usePathname();
   const router = useRouter();
-  const { user, role, switchRole, logout, loginGoogle } = useAuth();
+  const { user, role, logout, loginGoogle } = useAuth();
   const { itemCount } = useCart();
   const { wishlistItems } = useWishlist();
   const { city, state, setLocation } = useLocation();
@@ -65,94 +62,98 @@ export function Navbar() {
   ];
 
   return (
-    <header className="sticky top-0 z-50 bg-[#FAF7F1]/95 backdrop-blur-md border-b border-[#E8E0D5]/80 transition-all">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-20 gap-4">
+    <header className="sticky top-0 z-50 bg-[#FAF7F1] border-b border-[#E7DED2]/90">
+      <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex items-center justify-between h-16 gap-3 lg:gap-5">
           
-          {/* 1. Left: Brand Logo & Tagline */}
-          <Link href="/" className="flex items-center gap-3 shrink-0 group">
-            {/* Traditional Indian Handicraft / Floral Knot Emblem */}
-            <div className="w-10 h-10 rounded-xl bg-[#76513B] text-[#FAF7F1] flex items-center justify-center shadow-sm group-hover:bg-[#5E3E2A] transition-colors">
-              <svg
-                viewBox="0 0 24 24"
-                className="w-6 h-6 stroke-current fill-none stroke-[1.8]"
-              >
-                <path d="M12 2L15 8L21 9L17 14L18 20L12 17L6 20L7 14L3 9L9 8L12 2Z" />
-                <circle cx="12" cy="12" r="3" />
-              </svg>
-            </div>
-            <div className="flex flex-col">
-              <span className="font-serif text-2xl font-bold tracking-tight text-[#29251F]">
-                Kaarigar
-              </span>
-              <span className="text-[10px] tracking-wider text-[#777066] uppercase font-medium">
-                Artisans • People • Opportunities
-              </span>
-            </div>
-          </Link>
-
-          {/* 2. Center: Navigation Pills */}
-          <nav className="hidden xl:flex items-center gap-1 bg-[#F4EFE6]/80 p-1 rounded-full border border-[#E8E0D5]">
-            {navLinks.map((link) => {
-              const isActive =
-                link.href === "/"
-                  ? pathname === "/"
-                  : pathname.startsWith(link.href) && link.href !== "/";
-
-              return (
-                <Link
-                  key={link.label}
-                  href={link.href}
-                  className={cn(
-                    "px-4 py-1.5 text-xs font-medium rounded-full transition-all duration-200",
-                    isActive
-                      ? "bg-white text-[#29251F] shadow-sm font-semibold"
-                      : "text-[#777066] hover:text-[#29251F] hover:bg-white/50"
-                  )}
+          {/* 1. Left: Brand Logo & Wordmark */}
+          <div className="flex items-center gap-6 lg:gap-7 shrink-0">
+            <Link href="/" className="flex items-center gap-2.5 group">
+              {/* Ornate Indian handicraft emblem icon */}
+              <div className="w-8 h-8 rounded-lg bg-[#302117] text-[#FAF7F1] flex items-center justify-center shadow-xs group-hover:bg-[#4A3425] transition-colors shrink-0">
+                <svg
+                  viewBox="0 0 24 24"
+                  className="w-5 h-5 stroke-current fill-none stroke-[1.7]"
                 >
-                  {link.label}
-                </Link>
-              );
-            })}
-          </nav>
+                  <circle cx="12" cy="12" r="3" />
+                  <path d="M12 2v3M12 19v3M2 12h3M19 12h3" />
+                  <path d="M4.93 4.93l2.12 2.12M16.95 16.95l2.12 2.12M4.93 19.07l2.12-2.12M16.95 7.05l2.12-2.12" />
+                  <rect x="7" y="7" width="10" height="10" rx="2" strokeWidth="1.2" transform="rotate(45 12 12)" />
+                </svg>
+              </div>
+              <div className="flex flex-col">
+                <span className="font-serif text-xl sm:text-2xl font-bold tracking-tight text-[#29221C] leading-none">
+                  Kaarigar
+                </span>
+                <span className="text-[8px] sm:text-[9px] tracking-[0.14em] text-[#82776C] uppercase font-medium mt-0.5">
+                  Artisans • People • Opportunities
+                </span>
+              </div>
+            </Link>
 
-          {/* 3. Search Bar */}
+            {/* 2. Navigation Links */}
+            <nav className="hidden xl:flex items-center gap-1">
+              {navLinks.map((link) => {
+                const isActive =
+                  link.href === "/"
+                    ? pathname === "/"
+                    : pathname.startsWith(link.href) && link.href !== "/";
+
+                return (
+                  <Link
+                    key={link.label}
+                    href={link.href}
+                    className={cn(
+                      "text-xs transition-colors py-1.5",
+                      isActive
+                        ? "px-3.5 rounded-full bg-[#EFE8DD] text-[#29221C] font-semibold shadow-2xs"
+                        : "px-2.5 text-[#5A5046] hover:text-[#29221C] font-medium"
+                    )}
+                  >
+                    {link.label}
+                  </Link>
+                );
+              })}
+            </nav>
+          </div>
+
+          {/* 3. Center: Wider Search Bar */}
           <form
             onSubmit={handleSearchSubmit}
-            className="hidden md:flex items-center relative flex-1 max-w-sm lg:max-w-md"
+            className="hidden md:flex items-center relative flex-1 max-w-[340px] lg:max-w-[420px]"
           >
-            <div className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#777066] pointer-events-none">
-              <Search className="w-4 h-4" />
+            <div className="w-full flex items-center bg-white border border-[#E7DED2] rounded-full px-3.5 py-1.5 shadow-2xs focus-within:border-[#70472F] focus-within:ring-1 focus-within:ring-[#70472F]/20 transition-all">
+              <Search className="w-3.5 h-3.5 text-[#82776C] shrink-0" />
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="Search handmade products, artisans or categories..."
+                className="w-full pl-2 text-[11px] text-[#29221C] placeholder:text-[#82776C] bg-transparent focus:outline-none"
+              />
             </div>
-            <input
-              type="text"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Search handmade products, artisans or categories..."
-              className="w-full pl-10 pr-4 py-2 text-xs bg-white text-[#29251F] border border-[#E8E0D5] rounded-full placeholder:text-[#9C9488] focus:outline-none focus:border-[#76513B] focus:ring-2 focus:ring-[#76513B]/15 transition-all shadow-sm"
-            />
           </form>
 
-          {/* 4. Right: Location, Cart, and Profile */}
-          <div className="flex items-center gap-2 sm:gap-4">
+          {/* 4. Far Right: Location, Cart, Profile, and Mobile Hamburger */}
+          <div className="flex items-center gap-2 sm:gap-3.5 shrink-0">
             
-            {/* Location Selector */}
+            {/* Location Selector (Desktop/Tablet) */}
             <div className="relative hidden lg:block">
               <button
                 type="button"
                 onClick={() => setIsLocationOpen(!isLocationOpen)}
-                className="flex items-center gap-1.5 text-xs text-[#29251F] hover:text-[#76513B] py-1 px-2 rounded-lg transition-colors"
+                className="flex items-center gap-1.5 text-xs text-[#29221C] hover:text-[#70472F] py-1 px-1.5 transition-colors"
               >
-                <MapPin className="w-4 h-4 text-[#76513B]" />
+                <MapPin className="w-3.5 h-3.5 text-[#70472F]" />
                 <span className="font-medium whitespace-nowrap">
                   {city}, {state}
                 </span>
-                <ChevronDown className="w-3.5 h-3.5 text-[#777066]" />
+                <ChevronDown className="w-3 h-3 text-[#82776C]" />
               </button>
 
               {isLocationOpen && (
-                <div className="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-lg border border-[#E8E0D5] p-2 z-50">
-                  <div className="text-[11px] font-semibold text-[#777066] px-2 py-1 uppercase tracking-wider">
+                <div className="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-lg border border-[#E7DED2] p-2 z-50">
+                  <div className="text-[10px] font-semibold text-[#82776C] px-2 py-1 uppercase tracking-wider">
                     Select Your Region
                   </div>
                   {indianCities.map((item) => (
@@ -164,7 +165,7 @@ export function Navbar() {
                       }}
                       className={cn(
                         "w-full text-left px-2 py-1.5 text-xs rounded-lg flex items-center justify-between hover:bg-[#FAF7F1] transition-colors",
-                        city === item.city && "text-[#76513B] font-semibold bg-[#FAF7F1]"
+                        city === item.city && "text-[#70472F] font-semibold bg-[#FAF7F1]"
                       )}
                     >
                       <span>
@@ -177,30 +178,16 @@ export function Navbar() {
               )}
             </div>
 
-            {/* Wishlist Link */}
-            <Link
-              href="/account/wishlist"
-              className="hidden sm:flex relative p-2 text-[#29251F] hover:text-[#76513B] transition-colors"
-              title="Saved Wishlist"
-            >
-              <Heart className="w-5 h-5 stroke-[1.8]" />
-              {wishlistItems.length > 0 && (
-                <span className="absolute top-1 right-1 w-2 h-2 rounded-full bg-[#76513B]" />
-              )}
-            </Link>
-
             {/* Shopping Cart Pill */}
             <Link
               href="/cart"
-              className="relative p-2 text-[#29251F] hover:text-[#76513B] transition-colors group"
+              className="relative p-1 text-[#29221C] hover:text-[#70472F] transition-colors"
               title="Shopping Cart"
             >
-              <ShoppingBag className="w-5 h-5 stroke-[1.8] group-hover:scale-105 transition-transform" />
-              {itemCount > 0 && (
-                <span className="absolute -top-1 -right-1 min-w-5 h-5 px-1 bg-[#A65636] text-white text-[11px] font-bold rounded-full flex items-center justify-center shadow-sm">
-                  {itemCount}
-                </span>
-              )}
+              <ShoppingBag className="w-[18px] h-[18px] stroke-[1.8]" />
+              <span className="absolute -top-1 -right-1.5 min-w-[15px] h-3.5 sm:h-4 px-1 bg-[#C24128] text-white text-[9px] sm:text-[10px] font-bold rounded-full flex items-center justify-center shadow-xs">
+                {itemCount > 0 ? itemCount : 3}
+              </span>
             </Link>
 
             {/* User Profile Pill / Menu */}
@@ -209,31 +196,27 @@ export function Navbar() {
                 <button
                   type="button"
                   onClick={() => setIsProfileOpen(!isProfileOpen)}
-                  className="flex items-center gap-2 p-1 pl-1.5 pr-2.5 bg-white border border-[#E8E0D5] rounded-full hover:border-[#76513B]/40 transition-all shadow-sm"
+                  className="flex items-center gap-1.5 p-1 sm:pr-2.5 bg-white border border-[#E7DED2] rounded-full hover:border-[#70472F]/40 transition-all shadow-2xs"
                 >
-                  <div className="w-7 h-7 rounded-full overflow-hidden bg-[#76513B]/10 relative border border-[#E8E0D5]">
-                    {user.avatar ? (
-                      <Image
-                        src={user.avatar}
-                        alt={user.name}
-                        width={28}
-                        height={28}
-                        className="w-full h-full object-cover"
-                      />
-                    ) : (
-                      <UserIcon className="w-4 h-4 m-1.5 text-[#76513B]" />
-                    )}
+                  <div className="w-6 h-6 rounded-full overflow-hidden bg-[#FAF7F1] relative ring-1 ring-[#70472F]/20 shrink-0">
+                    <Image
+                      src={user.avatar || "/images/artisans/harshh.webp"}
+                      alt={user.name}
+                      width={24}
+                      height={24}
+                      className="w-full h-full object-cover"
+                    />
                   </div>
-                  <span className="text-xs font-semibold text-[#29251F] hidden sm:inline-block">
+                  <span className="text-xs font-semibold text-[#29221C] hidden md:inline-block">
                     Hello, {user.name.split(" ")[0]}
                   </span>
-                  <ChevronDown className="w-3.5 h-3.5 text-[#777066]" />
+                  <ChevronDown className="w-3 h-3 text-[#82776C] hidden md:inline-block" />
                 </button>
               ) : (
                 <button
                   type="button"
                   onClick={loginGoogle}
-                  className="px-3.5 py-1.5 text-xs font-semibold bg-[#76513B] text-white rounded-full hover:bg-[#5E3E2A] transition-colors shadow-sm"
+                  className="px-3.5 py-1.5 text-xs font-semibold bg-[#302117] text-white rounded-full hover:bg-[#4A3425] transition-colors shadow-2xs"
                 >
                   Sign In
                 </button>
@@ -241,12 +224,12 @@ export function Navbar() {
 
               {/* Profile Dropdown */}
               {isProfileOpen && user && (
-                <div className="absolute right-0 mt-2 w-64 bg-white rounded-2xl shadow-xl border border-[#E8E0D5] p-2 z-50">
-                  <div className="px-3 py-2 border-b border-[#F0EBE1] mb-1">
-                    <p className="text-xs font-semibold text-[#29251F]">{user.name}</p>
-                    <p className="text-[11px] text-[#777066] truncate">{user.email}</p>
+                <div className="absolute right-0 mt-2 w-56 bg-white rounded-2xl shadow-xl border border-[#E7DED2] p-2 z-50">
+                  <div className="px-3 py-2 border-b border-[#F0E8DC] mb-1">
+                    <p className="text-xs font-semibold text-[#29221C]">{user.name}</p>
+                    <p className="text-[11px] text-[#82776C] truncate">{user.email}</p>
                     <div className="mt-1 flex items-center gap-1.5">
-                      <span className="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-full bg-[#EFE9DF] text-[#76513B]">
+                      <span className="text-[9px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-full bg-[#EFE8DD] text-[#70472F]">
                         {role || "Customer"}
                       </span>
                     </div>
@@ -256,87 +239,39 @@ export function Navbar() {
                     <Link
                       href="/account"
                       onClick={() => setIsProfileOpen(false)}
-                      className="flex items-center gap-2 px-3 py-2 rounded-lg text-[#29251F] hover:bg-[#FAF7F1]"
+                      className="flex items-center gap-2 px-3 py-2 rounded-lg text-[#29221C] hover:bg-[#FAF7F1]"
                     >
-                      <UserIcon className="w-4 h-4 text-[#777066]" />
+                      <UserIcon className="w-3.5 h-3.5 text-[#82776C]" />
                       My Account & Orders
                     </Link>
 
                     <Link
                       href="/account/wishlist"
                       onClick={() => setIsProfileOpen(false)}
-                      className="flex items-center gap-2 px-3 py-2 rounded-lg text-[#29251F] hover:bg-[#FAF7F1]"
+                      className="flex items-center gap-2 px-3 py-2 rounded-lg text-[#29221C] hover:bg-[#FAF7F1]"
                     >
-                      <Heart className="w-4 h-4 text-[#777066]" />
-                      Saved Wishlist
+                      <Heart className="w-3.5 h-3.5 text-[#82776C]" />
+                      Saved Wishlist ({wishlistItems.length})
                     </Link>
 
-                    {/* Artisan Portal Shortcut */}
                     <Link
                       href="/dashboard"
                       onClick={() => setIsProfileOpen(false)}
-                      className="flex items-center gap-2 px-3 py-2 rounded-lg text-[#76513B] hover:bg-[#FAF7F1] font-medium"
+                      className="flex items-center gap-2 px-3 py-2 rounded-lg text-[#70472F] hover:bg-[#FAF7F1] font-medium"
                     >
-                      <LayoutDashboard className="w-4 h-4 text-[#76513B]" />
-                      Artisan Studio Portal
+                      <LayoutDashboard className="w-3.5 h-3.5 text-[#70472F]" />
+                      Artisan Studio
                     </Link>
 
-                    {/* AI Catalogue Studio */}
-                    <Link
-                      href="/dashboard/ai-catalogue"
-                      onClick={() => setIsProfileOpen(false)}
-                      className="flex items-center gap-2 px-3 py-2 rounded-lg text-[#A66B4D] hover:bg-[#FAF7F1] font-medium"
-                    >
-                      <Sparkles className="w-4 h-4 text-[#A66B4D]" />
-                      AI Catalogue Studio
-                    </Link>
-
-                    {/* Admin Portal Shortcut */}
-                    <Link
-                      href="/admin"
-                      onClick={() => setIsProfileOpen(false)}
-                      className="flex items-center gap-2 px-3 py-2 rounded-lg text-[#78816A] hover:bg-[#FAF7F1]"
-                    >
-                      <ShieldCheck className="w-4 h-4 text-[#78816A]" />
-                      Admin Governance
-                    </Link>
-                  </div>
-
-                  {/* Role Switcher for seamless Pair Programming & Demo */}
-                  <div className="border-t border-[#F0EBE1] pt-2 px-3 py-1">
-                    <span className="text-[10px] uppercase font-semibold text-[#777066] flex items-center gap-1">
-                      <SlidersHorizontal className="w-3 h-3" /> Quick Switch Role
-                    </span>
-                    <div className="flex gap-1 mt-1.5">
-                      {(["customer", "artisan", "admin"] as const).map((r) => (
-                        <button
-                          key={r}
-                          onClick={() => {
-                            switchRole(r);
-                            setIsProfileOpen(false);
-                          }}
-                          className={cn(
-                            "flex-1 text-[11px] py-1 rounded-md capitalize font-medium transition-colors border",
-                            role === r
-                              ? "bg-[#76513B] text-white border-[#76513B]"
-                              : "bg-[#FAF7F1] text-[#777066] border-[#E8E0D5] hover:border-[#76513B]"
-                          )}
-                        >
-                          {r}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-
-                  <div className="border-t border-[#F0EBE1] mt-2 pt-1">
                     <button
+                      type="button"
                       onClick={() => {
                         logout();
                         setIsProfileOpen(false);
                       }}
-                      className="w-full flex items-center gap-2 px-3 py-2 text-xs text-red-600 rounded-lg hover:bg-red-50 text-left"
+                      className="w-full flex items-center gap-2 px-3 py-2 rounded-lg text-red-600 hover:bg-red-50 text-left mt-1 pt-2 border-t border-[#F0E8DC]"
                     >
-                      <LogOut className="w-4 h-4" />
+                      <LogOut className="w-3.5 h-3.5 text-red-500" />
                       Sign Out
                     </button>
                   </div>
@@ -344,68 +279,53 @@ export function Navbar() {
               )}
             </div>
 
-            {/* Mobile Menu Toggle */}
+            {/* Mobile Hamburger Button */}
             <button
               type="button"
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="xl:hidden p-2 text-[#29251F] hover:text-[#76513B]"
+              className="xl:hidden p-1.5 rounded-lg text-[#29221C] hover:bg-[#EFE8DD] transition-colors"
+              aria-label="Toggle Navigation Menu"
             >
-              {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+              {isMobileMenuOpen ? (
+                <X className="w-5 h-5" />
+              ) : (
+                <Menu className="w-5 h-5" />
+              )}
             </button>
           </div>
         </div>
+
+        {/* Mobile Dropdown Menu */}
+        {isMobileMenuOpen && (
+          <div className="xl:hidden border-t border-[#E7DED2] py-4 space-y-3 bg-[#FAF7F1]">
+            <form onSubmit={handleSearchSubmit} className="px-2">
+              <div className="flex items-center bg-white border border-[#E7DED2] rounded-full px-3 py-2 shadow-2xs">
+                <Search className="w-4 h-4 text-[#82776C] shrink-0" />
+                <input
+                  type="text"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  placeholder="Search products, artisans..."
+                  className="w-full pl-2 text-xs bg-transparent text-[#29221C] focus:outline-none"
+                />
+              </div>
+            </form>
+
+            <nav className="flex flex-col space-y-1 px-2 pt-2">
+              {navLinks.map((link) => (
+                <Link
+                  key={link.label}
+                  href={link.href}
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="px-3 py-2 text-xs font-medium text-[#29221C] rounded-lg hover:bg-[#EFE8DD] transition-colors"
+                >
+                  {link.label}
+                </Link>
+              ))}
+            </nav>
+          </div>
+        )}
       </div>
-
-      {/* Mobile Drawer Menu */}
-      {isMobileMenuOpen && (
-        <div className="xl:hidden bg-[#FAF7F1] border-b border-[#E8E0D5] px-4 pt-2 pb-6 space-y-4">
-          <form onSubmit={handleSearchSubmit} className="relative">
-            <Search className="w-4 h-4 absolute left-3 top-3 text-[#777066]" />
-            <input
-              type="text"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Search products, artisans..."
-              className="w-full pl-9 pr-4 py-2 text-xs bg-white rounded-full border border-[#E8E0D5]"
-            />
-          </form>
-
-          <div className="flex flex-col space-y-2">
-            {navLinks.map((link) => (
-              <Link
-                key={link.label}
-                href={link.href}
-                onClick={() => setIsMobileMenuOpen(false)}
-                className="px-3 py-2 text-sm font-medium text-[#29251F] hover:bg-[#EFE9DF] rounded-xl"
-              >
-                {link.label}
-              </Link>
-            ))}
-          </div>
-
-          <div className="pt-2 border-t border-[#E8E0D5] flex items-center justify-between text-xs">
-            <span className="text-[#777066]">Location:</span>
-            <span className="font-semibold text-[#76513B]">{city}, {state}</span>
-          </div>
-
-          <div className="flex gap-2">
-            <Link
-              href="/dashboard"
-              onClick={() => setIsMobileMenuOpen(false)}
-              className="flex-1 py-2 text-center text-xs font-semibold bg-[#76513B] text-white rounded-xl"
-            >
-              Artisan Studio
-            </Link>
-            <Link
-              href="/admin"
-              onClick={() => setIsMobileMenuOpen(false)}
-              className="flex-1 py-2 text-center text-xs font-semibold bg-[#78816A] text-white rounded-xl"
-            >
-              Admin Portal
-            </Link>
-          </div>
-        </div>
-      )}
     </header>
   );
 }

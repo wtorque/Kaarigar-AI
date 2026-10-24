@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Playfair_Display, Plus_Jakarta_Sans } from "next/font/google";
+import { Playfair_Display, Plus_Jakarta_Sans, Caveat } from "next/font/google";
 import "./globals.css";
 import { Providers } from "@/components/layout/providers";
 
@@ -11,6 +11,12 @@ const playfair = Playfair_Display({
 
 const jakarta = Plus_Jakarta_Sans({
   variable: "--font-sans",
+  subsets: ["latin"],
+  display: "swap",
+});
+
+const caveat = Caveat({
+  variable: "--font-script",
   subsets: ["latin"],
   display: "swap",
 });
@@ -44,8 +50,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${playfair.variable} ${jakarta.variable} antialiased`}>
-      <body className="min-h-screen flex flex-col bg-[#FAF7F1] text-[#29251F] selection:bg-[#76513B]/20 selection:text-[#76513B]">
+    <html lang="en" className={`${playfair.variable} ${jakarta.variable} ${caveat.variable} antialiased`}>
+      <body className="min-h-screen flex flex-col bg-[#FAF7F1] text-[#29221C] selection:bg-[#70472F]/20 selection:text-[#70472F]">
         <Providers>{children}</Providers>
       </body>
     </html>

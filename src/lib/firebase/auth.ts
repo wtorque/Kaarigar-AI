@@ -24,7 +24,7 @@ export const MOCK_USERS: Record<UserRole, User> = {
     email: "harshh@kaarigar.in",
     name: "Harshh",
     role: "customer",
-    avatar: "/images/artisans/suresh.webp",
+    avatar: "/images/artisans/harshh.webp",
     phone: "+91 98765 43210",
     address: {
       street: "Plot 42, Gulmohar Enclave, Arera Colony",

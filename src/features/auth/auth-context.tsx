@@ -29,6 +29,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       const savedUser = localStorage.getItem("kaarigar_user");
       if (savedUser) {
         const parsed = JSON.parse(savedUser);
+        if (parsed.id === "usr_harshh" && (!parsed.avatar || parsed.avatar.includes("suresh"))) {
+          parsed.avatar = "/images/artisans/harshh.webp";
+          localStorage.setItem("kaarigar_user", JSON.stringify(parsed));
+        }
         setUser(parsed);
         api.setToken(`token-${parsed.id}`);
       } else {
