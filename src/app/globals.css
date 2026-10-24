@@ -1,0 +1,58 @@
+@import "tailwindcss";
+
+@theme {
+  --color-warm-bg: #FAF7F1;
+  --color-warm-surface: #FFFFFF;
+  --color-brand-brown: #70472F;
+  --color-deep-brown: #302117;
+  --color-warm-cream: #F0E8DC;
+  --color-border-warm: #E7DED2;
+  --color-muted-text: #82776C;
+  --color-rating-accent: #E6A044;
+  --color-white-surface: #FFFFFF;
+  --color-warm-primary: #70472F;
+  --color-warm-secondary: #A66B4D;
+  --color-warm-accent: #78816A;
+  --color-warm-text: #29221C;
+  --color-warm-muted: #82776C;
+  --color-warm-border: #E7DED2;
+  --color-warm-subtle: #F0E8DC;
+
+  --font-serif: var(--font-playfair), ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
+  --font-sans: var(--font-sans), ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-script: var(--font-script), "Caveat", cursive;
+}
+
+:root {
+  --background: #FAF7F1;
+  --foreground: #29221C;
+}
+
+body {
+  background-color: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.font-script {
+  font-family: var(--font-script);
+}
+
+/* Custom scrollbar */
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Subtle craft shadow matching reference */
+.shadow-craft {
+  box-shadow: 0 4px 20px -2px rgba(48, 33, 23, 0.08), 0 2px 6px -1px rgba(0, 0, 0, 0.04);
+}
+.shadow-craft-hover {
+  box-shadow: 0 8px 24px -4px rgba(48, 33, 23, 0.12), 0 2px 8px -2px rgba(0, 0, 0, 0.05);
+}

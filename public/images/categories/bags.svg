@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" width="400" height="300">
+  <defs>
+    <linearGradient id="g1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#9A8C70"/><stop offset="100%" stop-color="#60533C"/>
+    </linearGradient>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="6" stdDeviation="8" flood-opacity="0.18" flood-color="#4A2E1B"/>
+    </filter>
+    <radialGradient id="sunGlow" cx="50%" cy="40%" r="60%">
+      <stop offset="0%" stop-color="#FFF8EE" stop-opacity="0.8"/>
+      <stop offset="100%" stop-color="#EFE4D2" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="100%" height="100%" fill="url(#g1)" rx="16"/>
+  <rect width="100%" height="100%" fill="url(#sunGlow)"/>
+  <g filter="url(#shadow)">
+      <!-- Jute Tote Bag -->
+      <path d="M150,140 C150,90 250,90 250,140" fill="none" stroke="#5E432A" stroke-width="12" stroke-linecap="round"/>
+      <path d="M130,140 L270,140 L285,260 L115,260 Z" fill="#D8C29D"/>
+      <line x1="115" y1="180" x2="285" y2="180" stroke="#BF9E6A" stroke-width="3" stroke-dasharray="6,6"/>
+      <line x1="115" y1="220" x2="285" y2="220" stroke="#BF9E6A" stroke-width="3" stroke-dasharray="6,6"/>
+    </g>
+</svg>
